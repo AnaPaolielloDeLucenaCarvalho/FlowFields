@@ -10,8 +10,8 @@ namespace FlowPathfinding
         public Vector3 worldPos; // Actual world position
 
         // Flow Field Data
-        public int cost; // Traverse cost (1 for ground, 255 for wall)
-        public int bestCost; // Integration cost, distance to goal
+        public byte cost; // Traverse cost (1 for ground, 255 for wall)
+        public ushort bestCost; // Integration cost, distance to goal
         public Vector2 bestDirection;// Vector Field, direction to neighbour with lowest bestCost
 
         public Cell(Vector3 _worldPos, Vector2Int _gridIndex)
@@ -20,23 +20,23 @@ namespace FlowPathfinding
             gridIndex = _gridIndex;
             
             // Default
-            cost = 1;
-            bestCost = int.MaxValue;
+            cost = (byte)TerrainCost.NormalGround; //normal flat ground (2)
+            bestCost = ushort.MaxValue; // 'infinity' (unreached)
             bestDirection = Vector2.zero;
         }
 
         // Helper to increase cost, max = 255 (Impassable)
         public void IncreaseCost(int amount)
         {
-            if (cost == int.MaxValue) return;
+            if (cost == byte.MaxValue) return;
             
-            if (amount + cost >= int.MaxValue)
+            if (amount + cost >= byte.MaxValue)
             {
-                cost = int.MaxValue;
+                cost = byte.MaxValue;
             }
             else
             {
-                cost += (int)amount;
+                cost += (byte)amount;
             }
         }
     }
